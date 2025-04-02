@@ -21,7 +21,7 @@ export default function HomeScreen() {
           <FontAwesome name="chevron-right" size={18} color="#888" />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/faculty")}>
+        <TouchableOpacity style={styles.button} onPress={() => router.push("/FacultyLogin")}>
           <FontAwesome name="user-circle" size={22} color="#333" />
           <Text style={styles.buttonText}>Faculty Login/Register</Text>
           <FontAwesome name="chevron-right" size={18} color="#888" />
@@ -47,18 +47,73 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, alignItems: "center", backgroundColor: "#f8f9fa", paddingVertical: 50 },
-  logo: { width: 140, height: 140, resizeMode: "contain" },
-  title: { fontSize: 22, fontWeight: "bold", textAlign: "center", color: "#333", marginTop: 10 },
-  subtitle: { fontSize: 14, textAlign: "center", color: "#666", marginBottom: 25, paddingHorizontal: 15 },
-  buttonContainer: { width: "100%", alignItems: "center" },
-  button: {
-    flexDirection: "row", alignItems: "center", justifyContent: "space-between", width: "90%",
-    backgroundColor: "#fff", padding: 15, borderRadius: 12, marginVertical: 10, elevation: 3,
+  container: { 
+    flex: 1, 
+    alignItems: "center", 
+    backgroundColor: "#f8f9fa", 
+    paddingVertical: 50 
   },
-  buttonText: { flex: 1, fontSize: 16, fontWeight: "500", color: "#333", textAlign: "center" },
-  banner: { width: "90%", height: 140, resizeMode: "contain", marginBottom: 30 },
-  footerText: { fontSize: 12, color: "#666", textAlign: "center", paddingHorizontal: 15 },
-  link: { color: "#007bff", fontWeight: "bold" },
-  copyright: { fontSize: 12, color: "#999", marginTop: 5 },
+  logo: { 
+    width: 140, 
+    height: 140, 
+    resizeMode: "contain" 
+  },
+  title: { 
+    fontSize: 22, 
+    fontWeight: "bold", 
+    textAlign: "center", 
+    color: "#333", 
+    marginTop: 10 
+  },
+  subtitle: { 
+    fontSize: 14, 
+    textAlign: "center", 
+    color: "#666", 
+    marginBottom: 35, 
+    paddingHorizontal: 15 
+  },
+  buttonContainer: { 
+    width: "100%", 
+    alignItems: "center" 
+  },
+  button: {
+    flexDirection: "row", 
+    alignItems: "center", 
+    justifyContent: "space-between", 
+    width: "90%",
+    backgroundColor: "#fff", 
+    padding: 15, 
+    borderRadius: 12, 
+    marginVertical: 10, 
+    elevation: 3,
+  },
+  buttonText: { 
+    flex: 1, 
+    fontSize: 16, 
+    fontWeight: "500", 
+    color: "#333", 
+    textAlign: "center" 
+  },
+  banner: { 
+    width: "90%", 
+    height: 160, 
+    resizeMode: "contain", 
+    marginBottom: 30 
+  },
+  footerText: { 
+    fontSize: 12, 
+    color: "#666", 
+    textAlign: "center", 
+    paddingHorizontal: 15 
+  },
+  link: { 
+    color: "#007bff", 
+    fontWeight: "bold" 
+  },
+
+  copyright: { 
+    fontSize: 12, 
+    color: "#999",
+     marginTop: 5 
+    },
 });

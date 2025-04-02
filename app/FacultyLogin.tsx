@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import { useRouter } from 'expo-router';
 
-const login: React.FC = () => {
-  const [studentId, setStudentId] = useState('');
+const FacultyLogin: React.FC = () => {
+  const [adminId, setAdminId] = useState('');
   const [password, setPassword] = useState('');
-  const router = useRouter(); // Navigation
+  const router = useRouter(); // For navigation
 
   const handleLogin = () => {
-    console.log('Student ID:', studentId);
+    console.log('Admin ID:', adminId);
     console.log('Password:', password);
   };
 
@@ -25,14 +25,14 @@ const login: React.FC = () => {
 
       {/* Login Card */}
       <View style={styles.loginBox}>
-        <Text style={styles.loginTitle}>Student Login</Text>
+        <Text style={styles.loginTitle}>Administration Login</Text>
 
-        <Text style={styles.label}>Student ID</Text>
+        <Text style={styles.label}>Admin ID</Text>
         <TextInput
           style={styles.input}
-          placeholder="Enter your student ID"
-          value={studentId}
-          onChangeText={setStudentId}
+          placeholder="Enter your admin ID"
+          value={adminId}
+          onChangeText={setAdminId}
         />
 
         <Text style={styles.label}>Password</Text>
@@ -44,23 +44,24 @@ const login: React.FC = () => {
           onChangeText={setPassword}
         />
 
+        {/* Login Button */}
         <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
           <Text style={styles.loginButtonText}>Login</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity onPress={() => router.push('/register')} style={styles.registerLink}>
+        {/* Register Link */}
+        <TouchableOpacity onPress={() => router.push('/facultyRegister')} style={styles.registerLink}>
           <Text style={styles.registerText}>Don't have an account? Register here</Text>
         </TouchableOpacity>
       </View>
 
-      {/* Footer */}
+      {/* Ranking Banner */}
       <Image source={require('../assets/images/rank.png')} style={styles.rankImage} />
       <Text style={styles.footerText}>© 2024 World College. All rights reserved.</Text>
     </View>
   );
 };
 
-// 📌 Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -109,7 +110,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
     marginTop: 5,
-    width: '100%',
   },
   loginButton: {
     backgroundColor: '#000',
@@ -143,4 +143,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default login;
+export default FacultyLogin;

@@ -20,11 +20,11 @@ interface ImageSource {
 }
 
 const images = [
-  require("../assets/images/banner1.jpg"),
-  require("../assets/images/banner2.jpg"),
-  require("../assets/images/banner3.jpg"),
-  require("../assets/images/banner4.jpg"),
-  require("../assets/images/banner5.jpg"),
+  require("../assets/images/banner3.webp"),
+  require("../assets/images/banner1.webp"),
+  require("../assets/images/banner2.webp"),
+  require("../assets/images/banner4.webp"),
+
 ];
 
 interface VideoItemProps {
@@ -50,8 +50,8 @@ const sections: Section[] = [
   { id: "5", title: "Our Collaborations", image: require("../assets/images/collaborations.png"), screen: "Collaborations" },
   { id: "6", title: "Alumni", image: require("../assets/images/alumni.png"), screen: "Alumni" },
   { id: "7", title: "Achievements", image: require("../assets/images/acheievement.png"), screen: "Achievements" },
-  { id: "8", title: "Campus Tour", image: require("../assets/images/campus-tour.png"), screen: "CampusTour" },
-  { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "Gallery" },
+  { id: "8", title: "Campus Tour", image: require("../assets/images/campustour.png"), screen: "CampusTour" },
+  { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "pages/gallery" },
   { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "EnquiryBox" },
 ];
 
@@ -175,12 +175,13 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 3,
     elevation: 5,
-    borderRadius: 2,
+    borderRadius: 5,
+    overflow:"hidden",
   },
   banner: {
     width: width - 20,
     height: 170,
-    resizeMode: "cover",
+    resizeMode: "stretch",
     borderRadius: 5,
     margin: 10,
   },

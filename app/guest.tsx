@@ -52,7 +52,7 @@ const sections: Section[] = [
   { id: "7", title: "Achievements", image: require("../assets/images/acheievement.png"), screen: "Achievements" },
   { id: "8", title: "Campus Tour", image: require("../assets/images/campustour.png"), screen: "CampusTour" },
   { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "pages/gallery" },
-  { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "EnquiryBox" },
+  { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "pages/enquirybox" },
 ];
 
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);

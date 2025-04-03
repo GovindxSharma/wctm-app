@@ -15,6 +15,10 @@ import { WebView } from "react-native-webview";
 
 const { width, height } = Dimensions.get("window");
 
+interface ImageSource {
+  uri: string;
+}
+
 const images = [
   require("../assets/images/banner1.jpg"),
   require("../assets/images/banner2.jpg"),
@@ -23,13 +27,39 @@ const images = [
   require("../assets/images/banner5.jpg"),
 ];
 
+interface VideoItemProps {
+  item: string;
+}
+
+const VideoItem = memo(({ item }: VideoItemProps) => (
+  <WebView source={{ uri: item }} style={{ width, height }} allowsFullscreenVideo />
+));
+
+interface Section {
+  id: string;
+  title: string;
+  image: number;
+  screen: string;
+}
+
+const sections: Section[] = [
+  { id: "1", title: "About Us", image: require("../assets/images/Clogo.png"), screen: "pages/about" },
+  { id: "2", title: "Our Programs", image: require("../assets/images/program.png"), screen: "pages/program" },
+  { id: "3", title: "Admission", image: require("../assets/images/admission.png"), screen: "Admission" },
+  { id: "4", title: "Training & Placement", image: require("../assets/images/placement.png"), screen: "TrainingPlacement" },
+  { id: "5", title: "Our Collaborations", image: require("../assets/images/collaborations.png"), screen: "Collaborations" },
+  { id: "6", title: "Alumni", image: require("../assets/images/alumni.png"), screen: "Alumni" },
+  { id: "7", title: "Achievements", image: require("../assets/images/acheievement.png"), screen: "Achievements" },
+  { id: "8", title: "Campus Tour", image: require("../assets/images/campus-tour.png"), screen: "CampusTour" },
+  { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "Gallery" },
+  { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "EnquiryBox" },
+];
+
 const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const shortsVideos = [
   "https://www.youtube.com/embed/NHnEul13wCA?rel=0&modestbranding=1&controls=0&autoplay=1",
   "https://www.youtube.com/embed/NURiOYEjwZc?rel=0&modestbranding=1&controls=0&autoplay=1",
-  "https://www.youtube.com/embed/cDI9eQbDW1g?rel=0&modestbranding=1&controls=0&autoplay=1",
-  "https://www.youtube.com/embed/KyjZ864aDoQ?rel=0&modestbranding=1&controls=0&autoplay=1",
   "https://www.youtube.com/embed/YJhdGS_SadE?rel=0&modestbranding=1&controls=0&autoplay=1",
   "https://www.youtube.com/embed/fOygS3_jnzA?rel=0&modestbranding=1&controls=0&autoplay=1",
   "https://www.youtube.com/embed/jop1QK3WK00?rel=0&modestbranding=1&controls=0&autoplay=1",
@@ -42,28 +72,11 @@ const shortsVideos = [
   "https://www.youtube.com/embed/PbpTL2GFHMU?rel=0&modestbranding=1&controls=0&autoplay=1",
 ];
 
-const sections = [
-  { id: "1", title: "About Us", image: require("../assets/images/Clogo.png"), screen: "AboutUs" },
-  { id: "2", title: "Our Programs", image: require("../assets/images/program.png"), screen: "Programs" },
-  { id: "3", title: "Admission", image: require("../assets/images/admission.png"), screen: "Admission" },
-  { id: "4", title: "Training & Placement", image: require("../assets/images/placement.png"), screen: "TrainingPlacement" },
-  { id: "5", title: "Our Collaborations", image: require("../assets/images/collaborations.png"), screen: "Collaborations" },
-  { id: "6", title: "Alumni", image: require("../assets/images/alumni.png"), screen: "Alumni" },
-  { id: "7", title: "Achievements", image: require("../assets/images/achievements.png"), screen: "Achievements" },
-  { id: "8", title: "Campus Tour", image: require("../assets/images/campus-tour.png"), screen: "CampusTour" },
-  { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "Gallery" },
-  { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "EnquiryBox" },
-];
-
-const VideoItem = memo(({ item }) => (
-  <WebView source={{ uri: item }} style={{ width, height }} allowsFullscreenVideo />
-));
-
 export default function Guest() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<{ navigate: (screen: string) => void }>();
   const [showWebView, setShowWebView] = useState(false);
   const scrollX = useRef(new Animated.Value(0)).current;
-  const flatListRef = useRef(null);
+  const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
     let index = 0;
@@ -119,7 +132,7 @@ export default function Guest() {
         numColumns={2}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(item.title)}>
+          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(item.screen)}>
             <Image source={item.image} style={styles.cardImage} />
             <Text style={styles.cardTitle}>{item.title}</Text>
           </TouchableOpacity>
@@ -132,9 +145,9 @@ export default function Guest() {
           <Ionicons name="home" size={28} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => setShowWebView(true)}>
-          <Ionicons name="gift" size={28} color="black" />
+          <Ionicons name="flash" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert("Announcements Coming Soon!")}> 
+        <TouchableOpacity onPress={() => alert("No Announcement")}> 
           <Ionicons name="megaphone" size={28} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -157,7 +170,7 @@ const styles = StyleSheet.create({
     marginVertical: 10 
   },
   imageWrapper: {
-    // shadowColor: "#000",
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 3,
@@ -166,8 +179,7 @@ const styles = StyleSheet.create({
   },
   banner: {
     width: width - 20,
-    // height: height * 0.3,
-    height:170,
+    height: 170,
     resizeMode: "cover",
     borderRadius: 5,
     margin: 10,

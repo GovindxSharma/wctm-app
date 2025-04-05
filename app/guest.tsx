@@ -43,14 +43,14 @@ interface Section {
 }
 
 const sections: Section[] = [
-  { id: "1", title: "About Us", image: require("../assets/images/Clogo.png"), screen: "pages/about" },
+  { id: "1", title: "About Us", image: require("../assets/images/about.png"), screen: "pages/about" },
   { id: "2", title: "Our Programs", image: require("../assets/images/program.png"), screen: "pages/program" },
-  { id: "3", title: "Admission", image: require("../assets/images/admission.png"), screen: "Admission" },
-  { id: "4", title: "Training & Placement", image: require("../assets/images/placement.png"), screen: "TrainingPlacement" },
-  { id: "5", title: "Our Collaborations", image: require("../assets/images/collaborations.png"), screen: "Collaborations" },
+  { id: "3", title: "Admission", image: require("../assets/images/admission.png"), screen: "pages/admission" },
+  { id: "4", title: "Training & Placement", image: require("../assets/images/placement.png"), screen: "pages/placements" },
+  { id: "5", title: "Our Collaborations", image: require("../assets/images/collaborations.png"), screen: "pages/collaborations" },
   { id: "6", title: "Alumni", image: require("../assets/images/alumni.png"), screen: "Alumni" },
   { id: "7", title: "Achievements", image: require("../assets/images/acheievement.png"), screen: "Achievements" },
-  { id: "8", title: "Campus Tour", image: require("../assets/images/campustour.png"), screen: "CampusTour" },
+  { id: "8", title: "Our Events", image: require("../assets/images/ourevents.png"), screen: "pages/ourevents" },
   { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "pages/gallery" },
   { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "pages/enquirybox" },
 ];

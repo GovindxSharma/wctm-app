@@ -10,7 +10,14 @@ const login: React.FC = () => {
   const handleLogin = () => {
     console.log('Student ID:', studentId);
     console.log('Password:', password);
+  
+    if (studentId === 'stud123' && password === 'pass') {
+      router.push('/studentProfile');
+    } else {
+      alert('Invalid student ID or password');
+    }
   };
+  
 
   return (
     <View style={styles.container}>

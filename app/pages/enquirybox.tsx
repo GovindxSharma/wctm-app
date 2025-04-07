@@ -8,7 +8,11 @@ import {
   StyleSheet,
   Dimensions,
   Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
 } from "react-native";
+import * as Animatable from "react-native-animatable";
 
 const screenWidth = Dimensions.get("window").width;
 
@@ -16,6 +20,15 @@ const EnquiryBox = () => {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.9)).current;
   const [isPressed, setIsPressed] = useState(false);
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    city: "",
+    course: "",
+    message: "",
+  });
 
   useEffect(() => {
     Animated.parallel([
@@ -32,55 +45,86 @@ const EnquiryBox = () => {
     ]).start();
   }, []);
 
+  const handleChange = (field: string, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }));
+  };
+
   const handleSubmit = () => {
+    const { name, email, phone, city, course, message } = form;
+
+    if (!name || !email || !phone || !city || !course || !message) {
+      Alert.alert("⚠️ Missing Information", "Please fill out all fields before submitting.");
+      return;
+    }
+
     Alert.alert("✅ Enquiry Submitted", "We will get back to you soon!");
+    // Optionally reset the form here
+    // setForm({ name: "", email: "", phone: "", city: "", course: "", message: "" });
   };
 
   return (
-    <Animated.View style={[styles.container, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
-      <Text style={styles.heading}>📩 Get in Touch</Text>
-      <Text style={styles.subheading}>Fill out the form and we will contact you soon!</Text>
+    <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+        <Animated.View style={[styles.container, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
+          <Text style={styles.heading}>📩 Get in Touch</Text>
+          <Text style={styles.subheading}>Fill out the form and we will contact you soon!</Text>
 
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="Full Name" style={styles.input} placeholderTextColor="#777" />
-      </View>
+          {[
+            { placeholder: "Full Name", key: "name", keyboardType: "default" },
+            { placeholder: "Email Address", key: "email", keyboardType: "email-address" },
+            { placeholder: "Phone Number", key: "phone", keyboardType: "phone-pad" },
+            { placeholder: "City", key: "city", keyboardType: "default" },
+            { placeholder: "Preferred Course / Program", key: "course", keyboardType: "default" },
+          ].map((item, index) => (
+            <Animatable.View
+              key={item.key}
+              animation="fadeInUp"
+              delay={200 + index * 100}
+              style={styles.inputContainer}
+            >
+              <TextInput
+                placeholder={item.placeholder}
+                placeholderTextColor="#777"
+                keyboardType={item.keyboardType as any}
+                style={styles.input}
+                value={form[item.key as keyof typeof form]}
+                onChangeText={(text) => handleChange(item.key, text)}
+              />
+            </Animatable.View>
+          ))}
 
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="Email Address" keyboardType="email-address" style={styles.input} placeholderTextColor="#777" />
-      </View>
+          <Animatable.View animation="fadeInUp" delay={800} style={[styles.inputContainer, styles.textArea]}>
+            <TextInput
+              placeholder="Your Message"
+              multiline
+              numberOfLines={4}
+              placeholderTextColor="#777"
+              style={[styles.input, { height: 80 }]}
+              value={form.message}
+              onChangeText={(text) => handleChange("message", text)}
+            />
+          </Animatable.View>
 
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="Phone Number" keyboardType="phone-pad" style={styles.input} placeholderTextColor="#777" />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="City" style={styles.input} placeholderTextColor="#777" />
-      </View>
-
-      <View style={styles.inputContainer}>
-        <TextInput placeholder="Preferred Course / Program" style={styles.input} placeholderTextColor="#777" />
-      </View>
-
-      <View style={[styles.inputContainer, styles.textArea]}>
-        <TextInput placeholder="Your Message" multiline numberOfLines={4} style={styles.input} placeholderTextColor="#777" />
-      </View>
-
-      <TouchableOpacity
-        style={[styles.button, isPressed && styles.buttonPressed]}
-        onPress={handleSubmit}
-        activeOpacity={0.9}
-        onPressIn={() => setIsPressed(true)}
-        onPressOut={() => setIsPressed(false)}
-      >
-        <Text style={styles.buttonText}>Submit Enquiry</Text>
-      </TouchableOpacity>
-    </Animated.View>
+          <Animatable.View animation="zoomIn" delay={1000}>
+            <TouchableOpacity
+              style={[styles.button, isPressed && styles.buttonPressed]}
+              onPress={handleSubmit}
+              activeOpacity={0.9}
+              onPressIn={() => setIsPressed(true)}
+              onPressOut={() => setIsPressed(false)}
+            >
+              <Text style={styles.buttonText}>Submit Enquiry</Text>
+            </TouchableOpacity>
+          </Animatable.View>
+        </Animated.View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#F5F5F5", // Soft Grey Background
+    backgroundColor: "#F5F5F5",
     padding: 25,
     margin: 15,
     borderRadius: 15,
@@ -92,13 +136,13 @@ const styles = StyleSheet.create({
     width: screenWidth - 30,
     alignSelf: "center",
     borderWidth: 2,
-    borderColor: "#00A6A6", // Teal Border
+    borderColor: "#00A6A6",
   },
   heading: {
     fontSize: 26,
     fontWeight: "bold",
     textAlign: "center",
-    color: "#005F73", // Deep Teal
+    color: "#005F73",
     marginBottom: 5,
     textTransform: "uppercase",
   },
@@ -114,7 +158,7 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 12,
     borderWidth: 1,
-    borderColor: "#00A6A6", // Teal Border
+    borderColor: "#00A6A6",
   },
   input: {
     fontSize: 16,
@@ -122,11 +166,10 @@ const styles = StyleSheet.create({
     paddingLeft: 5,
   },
   textArea: {
-    height: 90,
     textAlignVertical: "top",
   },
   button: {
-    backgroundColor: "#FFD700", // Gold Button
+    backgroundColor: "#FFD700",
     paddingVertical: 12,
     borderRadius: 10,
     alignItems: "center",
@@ -139,7 +182,7 @@ const styles = StyleSheet.create({
     transform: [{ scale: 0.97 }],
   },
   buttonText: {
-    color: "#005F73", // Deep Teal Text
+    color: "#005F73",
     fontSize: 18,
     fontWeight: "bold",
     textTransform: "uppercase",

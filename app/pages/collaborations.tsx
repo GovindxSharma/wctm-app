@@ -11,7 +11,6 @@ import {
   Modal,
 } from "react-native";
 
-// Importing local images and descriptions
 const imageData = [
   {
     image: require("../../assets/images/events/collab2.jpg"),
@@ -30,36 +29,43 @@ const imageData = [
 const screenWidth = Dimensions.get("window").width;
 
 const Collaborations = () => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const animations = useRef(
+    imageData.map(() => ({
+      opacity: new Animated.Value(0),
+      translateY: new Animated.Value(30),
+      scale: new Animated.Value(0.95),
+    }))
+  ).current;
+
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      delay: 200,
-      useNativeDriver: true,
-    }).start();
+    const anims = animations.map((anim, i) =>
+      Animated.parallel([
+        Animated.timing(anim.opacity, {
+          toValue: 1,
+          duration: 600,
+          delay: i * 200,
+          useNativeDriver: true,
+        }),
+        Animated.timing(anim.translateY, {
+          toValue: 0,
+          duration: 600,
+          delay: i * 200,
+          useNativeDriver: true,
+        }),
+        Animated.spring(anim.scale, {
+          toValue: 1,
+          friction: 6,
+          delay: i * 200,
+          useNativeDriver: true,
+        }),
+      ])
+    );
+
+    Animated.stagger(150, anims).start();
   }, []);
-
-  const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1.03,
-      friction: 3,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 3,
-      useNativeDriver: true,
-    }).start();
-  };
 
   const openModal = (image) => {
     setSelectedImage(image);
@@ -72,17 +78,24 @@ const Collaborations = () => {
 
   return (
     <View style={styles.container}>
-      <Animated.FlatList
+      <FlatList
         data={imageData}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={1}
-        renderItem={({ item }) => (
-          <TouchableWithoutFeedback
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-            onPress={() => openModal(item.image)}
-          >
-            <Animated.View style={[styles.card, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
+        keyExtractor={(_, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
+        renderItem={({ item, index }) => (
+          <TouchableWithoutFeedback onPress={() => openModal(item.image)}>
+            <Animated.View
+              style={[
+                styles.card,
+                {
+                  opacity: animations[index].opacity,
+                  transform: [
+                    { translateY: animations[index].translateY },
+                    { scale: animations[index].scale },
+                  ],
+                },
+              ]}
+            >
               <Image source={item.image} style={styles.image} />
               <View style={styles.textContainer}>
                 <Text style={styles.imageText}>{item.description}</Text>
@@ -90,10 +103,8 @@ const Collaborations = () => {
             </Animated.View>
           </TouchableWithoutFeedback>
         )}
-        showsVerticalScrollIndicator={false}
       />
 
-      {/* Modal for Zoomed Image */}
       <Modal visible={modalVisible} transparent={true} animationType="fade">
         <TouchableWithoutFeedback onPress={closeModal}>
           <View style={styles.modalBackground}>
@@ -108,7 +119,7 @@ const Collaborations = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#F5F5F5", // Soft grey background
+    backgroundColor: "#F5F5F5",
     paddingTop: 20,
     paddingHorizontal: 15,
   },
@@ -124,9 +135,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: "100%", // Full width of the card
+    width: "100%",
     height: 250,
-    resizeMode: "cover", // Ensures it fills the container nicely
+    resizeMode: "cover",
   },
   textContainer: {
     padding: 15,

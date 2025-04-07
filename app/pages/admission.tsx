@@ -1,5 +1,12 @@
-import React, { useRef } from "react";
-import { View, Text, TouchableOpacity, StyleSheet, Linking, Animated } from "react-native";
+import React, { useEffect, useRef } from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Linking,
+  Animated,
+} from "react-native";
 
 const sections = [
   { title: "📜 Online Enquiry Form", link: "https://www.wctmgurgaon.com/online-enquiry-form" },
@@ -11,14 +18,29 @@ const sections = [
 
 const AdmissionSection = () => {
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const translateYAnims = useRef(sections.map(() => new Animated.Value(50))).current;
+
+  useEffect(() => {
+    const animations = translateYAnims.map((anim, index) =>
+      Animated.timing(anim, {
+        toValue: 0,
+        duration: 500,
+        delay: index * 150,
+        useNativeDriver: true,
+      })
+    );
+    Animated.stagger(100, animations).start();
+  }, []);
 
   const handlePress = (url) => {
-    Linking.openURL(url).catch((err) => console.error("Error opening link:", err));
+    Linking.openURL(url).catch((err) =>
+      console.error("Error opening link:", err)
+    );
   };
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
-      toValue: 1.05, // Smooth zoom-in effect
+      toValue: 1.05,
       friction: 3,
       useNativeDriver: true,
     }).start();
@@ -26,7 +48,7 @@ const AdmissionSection = () => {
 
   const handlePressOut = () => {
     Animated.spring(scaleAnim, {
-      toValue: 1, // Reset size
+      toValue: 1,
       friction: 3,
       useNativeDriver: true,
     }).start();
@@ -36,7 +58,22 @@ const AdmissionSection = () => {
     <View style={styles.container}>
       <Text style={styles.heading}>🎓 Admission Section</Text>
       {sections.map((item, index) => (
-        <Animated.View key={index} style={[styles.animatedContainer, { transform: [{ scale: scaleAnim }] }]}>
+        <Animated.View
+          key={index}
+          style={[
+            styles.animatedContainer,
+            {
+              transform: [
+                { scale: scaleAnim },
+                { translateY: translateYAnims[index] },
+              ],
+              opacity: translateYAnims[index].interpolate({
+                inputRange: [0, 50], // ✅ FIXED RANGE
+                outputRange: [1, 0],  // ✅ MATCHING OUTPUT
+              }),
+            },
+          ]}
+        >
           <TouchableOpacity
             style={styles.sectionButton}
             onPress={() => handlePress(item.link)}
@@ -53,18 +90,19 @@ const AdmissionSection = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    //backgroundColor: "#000000", // Matte Black Background
-    paddingVertical: 30,
-    alignItems: "center",
+    // flex: 1,
+    // paddingVertical: 30,
+    // alignItems: "center",
   },
   heading: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 20,
-    color: "#000000", // Pure White Text
+    color: "#000000",
     textTransform: "uppercase",
     letterSpacing: 1,
+    paddingTop:25,
+    paddingLeft:20,
   },
   animatedContainer: {
     width: "100%",
@@ -73,20 +111,20 @@ const styles = StyleSheet.create({
   sectionButton: {
     width: "85%",
     paddingVertical: 18,
-    backgroundColor: "#FFFFFF", // White Buttons
+    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     alignItems: "center",
     marginVertical: 8,
-    shadowColor: "#B0B0B0", // Soft Gray Shadow
+    shadowColor: "#B0B0B0",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    elevation: 8, // Shadow for Android
+    elevation: 8,
   },
   sectionText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#000000", // Black Text for Contrast
+    color: "#000000",
     textTransform: "capitalize",
     letterSpacing: 0.5,
   },

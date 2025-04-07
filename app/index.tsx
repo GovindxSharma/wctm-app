@@ -1,6 +1,7 @@
 // app/index.tsx
 import { useRouter } from "expo-router";
 import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
+import * as Animatable from "react-native-animatable";
 import { FontAwesome } from "@expo/vector-icons";
 
 export default function HomeScreen() {
@@ -8,40 +9,63 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Image source={require("../assets/images/Clogo.png")} style={styles.logo} />
-      <Text style={styles.title}>World College of Technology and Management</Text>
-      <Text style={styles.subtitle}>
+      <Animatable.Image 
+        animation="fadeInDown"
+        duration={1000}
+        source={require("../assets/images/Clogo.png")}
+        style={styles.logo}
+      />
+
+      <Animatable.Text animation="fadeIn" delay={800} style={styles.title}>
+        World College of Technology and Management
+      </Animatable.Text>
+
+      <Animatable.Text animation="fadeIn" delay={1000} style={styles.subtitle}>
         (Approved by AICTE, Ministry of HRD, Govt. of India, and affiliated to MDU, Rohtak)
-      </Text>
+      </Animatable.Text>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/login")}>
-          <FontAwesome name="user" size={22} color="#333" />
-          <Text style={styles.buttonText}>Student Login/Register</Text>
-          <FontAwesome name="chevron-right" size={18} color="#888" />
-        </TouchableOpacity>
+        <Animatable.View animation="fadeInRight" delay={1200}>
+          <TouchableOpacity style={styles.button} onPress={() => router.push("/login")}>
+            <FontAwesome name="user" size={22} color="#333" />
+            <Text style={styles.buttonText}>Student Login/Register</Text>
+            <FontAwesome name="chevron-right" size={18} color="#888" />
+          </TouchableOpacity>
+        </Animatable.View>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/FacultyLogin")}>
-          <FontAwesome name="user-circle" size={22} color="#333" />
-          <Text style={styles.buttonText}>Faculty Login/Register</Text>
-          <FontAwesome name="chevron-right" size={18} color="#888" />
-        </TouchableOpacity>
+        <Animatable.View animation="fadeInLeft" delay={1400}>
+          <TouchableOpacity style={styles.button} onPress={() => router.push("/FacultyLogin")}>
+            <FontAwesome name="user-circle" size={22} color="#333" />
+            <Text style={styles.buttonText}>Faculty Login/Register</Text>
+            <FontAwesome name="chevron-right" size={18} color="#888" />
+          </TouchableOpacity>
+        </Animatable.View>
 
-        <TouchableOpacity style={styles.button} onPress={() => router.push("/guest")}>
-          <FontAwesome name="users" size={22} color="#333" />
-          <Text style={styles.buttonText}>Continue as Guest</Text>
-          <FontAwesome name="chevron-right" size={18} color="#888" />
-        </TouchableOpacity>
+        <Animatable.View animation="fadeInRight" delay={1600}>
+          <TouchableOpacity style={styles.button} onPress={() => router.push("/guest")}>
+            <FontAwesome name="users" size={22} color="#333" />
+            <Text style={styles.buttonText}>Continue as Guest</Text>
+            <FontAwesome name="chevron-right" size={18} color="#888" />
+          </TouchableOpacity>
+        </Animatable.View>
       </View>
 
-      <Image source={require("../assets/images/rank.png")} style={styles.banner} />
+      <Animatable.Image 
+        animation="fadeInUp"
+        delay={1800}
+        duration={1000}
+        source={require("../assets/images/rank.png")}
+        style={styles.banner}
+      />
 
-      <Text style={styles.footerText}>
+      <Animatable.Text animation="fadeIn" delay={2500} style={styles.footerText}>
         By continuing, you agree to our <Text style={styles.link}>Terms of Service</Text> and{" "}
         <Text style={styles.link}>Privacy Policy</Text>
-      </Text>
+      </Animatable.Text>
 
-      <Text style={styles.copyright}>© 2024 World College. All rights reserved.</Text>
+      <Animatable.Text animation="fadeIn" delay={2700} style={styles.copyright}>
+        © 2024 World College. All rights reserved.
+      </Animatable.Text>
     </View>
   );
 }
@@ -110,10 +134,9 @@ const styles = StyleSheet.create({
     color: "#007bff", 
     fontWeight: "bold" 
   },
-
   copyright: { 
     fontSize: 12, 
     color: "#999",
-     marginTop: 5 
-    },
+    marginTop: 5 
+  },
 });

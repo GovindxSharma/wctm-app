@@ -10,7 +10,15 @@ const FacultyLogin: React.FC = () => {
   const handleLogin = () => {
     console.log('Admin ID:', adminId);
     console.log('Password:', password);
+  
+    // Simple credential check
+    if (adminId === 'admin123' && password === 'admin') {
+      router.push('/adminProfile'); // navigate to adminProfile screen
+    } else {
+      alert('Invalid credentials. Please try again.');
+    }
   };
+  
 
   return (
     <View style={styles.container}>

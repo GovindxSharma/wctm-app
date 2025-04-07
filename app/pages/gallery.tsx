@@ -11,7 +11,6 @@ import {
   Modal,
 } from "react-native";
 
-// Importing local images
 const images = [
   require("../../assets/images/gallery/image10.jpg"),
   require("../../assets/images/gallery/image2.jpg"),
@@ -31,36 +30,46 @@ const numColumns = 2;
 const screenWidth = Dimensions.get("window").width;
 
 const GalleryScreen = () => {
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scaleAnim = useRef(new Animated.Value(1)).current;
-
+  const [animations] = useState(
+    images.map(() => new Animated.ValueXY({ x: 0, y: 0 }))
+  );
   const [selectedImage, setSelectedImage] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 1000,
-      delay: 200,
-      useNativeDriver: true,
-    }).start();
+    const animationConfigs = animations.map((anim, index) => {
+      // Animate in from different directions
+      const direction = index % 4;
+      let xFrom = 0;
+      let yFrom = 0;
+
+      switch (direction) {
+        case 0:
+          xFrom = -300; // From left
+          break;
+        case 1:
+          xFrom = 300; // From right
+          break;
+        case 2:
+          yFrom = -300; // From top
+          break;
+        case 3:
+          yFrom = 300; // From bottom
+          break;
+      }
+
+      anim.setValue({ x: xFrom, y: yFrom });
+
+      return Animated.spring(anim, {
+        toValue: { x: 0, y: 0 },
+        useNativeDriver: true,
+        friction: 8,
+        delay: index * 100,
+      });
+    });
+
+    Animated.stagger(80, animationConfigs).start();
   }, []);
-
-  const handlePressIn = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1.1,
-      friction: 3,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handlePressOut = () => {
-    Animated.spring(scaleAnim, {
-      toValue: 1,
-      friction: 3,
-      useNativeDriver: true,
-    }).start();
-  };
 
   const openModal = (image) => {
     setSelectedImage(image);
@@ -71,34 +80,37 @@ const GalleryScreen = () => {
     setModalVisible(false);
   };
 
+  const renderItem = ({ item, index }) => (
+    <TouchableWithoutFeedback onPress={() => openModal(item)}>
+      <Animated.View
+        style={[
+          styles.imageContainer,
+          {
+            transform: animations[index].getTranslateTransform(),
+          },
+        ]}
+      >
+        <Image source={item} style={styles.image} />
+      </Animated.View>
+    </TouchableWithoutFeedback>
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>📸 Our Gallery</Text>
-      <Animated.FlatList
+
+      <FlatList
         data={images}
         keyExtractor={(item, index) => index.toString()}
         numColumns={numColumns}
-        renderItem={({ item }) => (
-          <TouchableWithoutFeedback
-            onPressIn={handlePressIn}
-            onPressOut={handlePressOut}
-            onPress={() => openModal(item)}
-          >
-            <Animated.View
-              style={[styles.imageContainer, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}
-            >
-              <Image source={item} style={styles.image} />
-            </Animated.View>
-          </TouchableWithoutFeedback>
-        )}
+        renderItem={renderItem}
         showsVerticalScrollIndicator={false}
       />
 
-      {/* Modal for Zoomed Image */}
-      <Modal visible={modalVisible} transparent={true} animationType="fade">
+      <Modal visible={modalVisible} transparent animationType="fade">
         <TouchableWithoutFeedback onPress={closeModal}>
           <View style={styles.modalBackground}>
-            <Animated.Image source={selectedImage} style={styles.zoomedImage} />
+            <Image source={selectedImage} style={styles.zoomedImage} />
           </View>
         </TouchableWithoutFeedback>
       </Modal>

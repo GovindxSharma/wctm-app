@@ -1,3 +1,4 @@
+import * as Animatable from "react-native-animatable";
 import React, { useRef, useEffect, useState, memo } from "react";
 import {
   View,
@@ -15,47 +16,12 @@ import { WebView } from "react-native-webview";
 
 const { width, height } = Dimensions.get("window");
 
-interface ImageSource {
-  uri: string;
-}
-
 const images = [
   require("../assets/images/banner3.webp"),
   require("../assets/images/banner1.webp"),
   require("../assets/images/banner2.webp"),
   require("../assets/images/banner4.webp"),
-
 ];
-
-interface VideoItemProps {
-  item: string;
-}
-
-const VideoItem = memo(({ item }: VideoItemProps) => (
-  <WebView source={{ uri: item }} style={{ width, height }} allowsFullscreenVideo />
-));
-
-interface Section {
-  id: string;
-  title: string;
-  image: number;
-  screen: string;
-}
-
-const sections: Section[] = [
-  { id: "1", title: "About Us", image: require("../assets/images/about.png"), screen: "pages/about" },
-  { id: "2", title: "Our Programs", image: require("../assets/images/program.png"), screen: "pages/program" },
-  { id: "3", title: "Admission", image: require("../assets/images/admission.png"), screen: "pages/admission" },
-  { id: "4", title: "Training & Placement", image: require("../assets/images/placement.png"), screen: "pages/placements" },
-  { id: "5", title: "Our Collaborations", image: require("../assets/images/collaborations.png"), screen: "pages/collaborations" },
-  { id: "6", title: "Alumni", image: require("../assets/images/alumni.png"), screen: "Alumni" },
-  { id: "7", title: "Achievements", image: require("../assets/images/acheievement.png"), screen: "Achievements" },
-  { id: "8", title: "Our Events", image: require("../assets/images/ourevents.png"), screen: "pages/ourevents" },
-  { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "pages/gallery" },
-  { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "pages/enquirybox" },
-];
-
-const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 const shortsVideos = [
   "https://www.youtube.com/embed/NHnEul13wCA?rel=0&modestbranding=1&controls=0&autoplay=1",
@@ -71,6 +37,25 @@ const shortsVideos = [
   "https://www.youtube.com/embed/DRz36lmdUv8?rel=0&modestbranding=1&controls=0&autoplay=1",
   "https://www.youtube.com/embed/PbpTL2GFHMU?rel=0&modestbranding=1&controls=0&autoplay=1",
 ];
+
+const sections = [
+  { id: "1", title: "About Us", image: require("../assets/images/about.png"), screen: "pages/about" },
+  { id: "2", title: "Our Programs", image: require("../assets/images/program.png"), screen: "pages/program" },
+  { id: "3", title: "Admission", image: require("../assets/images/admission.png"), screen: "pages/admission" },
+  { id: "4", title: "Training & Placement", image: require("../assets/images/placement.png"), screen: "pages/placements" },
+  { id: "5", title: "Our Collaborations", image: require("../assets/images/collaborations.png"), screen: "pages/collaborations" },
+  { id: "6", title: "Alumni", image: require("../assets/images/alumni.png"), screen: "pages/alumni" },
+  { id: "7", title: "Achievements", image: require("../assets/images/acheievement.png"), screen: "pages/achievements" },
+  { id: "8", title: "Our Events", image: require("../assets/images/ourevents.png"), screen: "pages/ourevents" },
+  { id: "9", title: "Gallery", image: require("../assets/images/gallery.png"), screen: "pages/gallery" },
+  { id: "10", title: "Enquiry Box", image: require("../assets/images/enquiry.png"), screen: "pages/enquirybox" },
+];
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
+
+const VideoItem = memo(({ item }: { item: string }) => (
+  <WebView source={{ uri: item }} style={{ width, height }} allowsFullscreenVideo />
+));
 
 export default function Guest() {
   const navigation = useNavigation<{ navigate: (screen: string) => void }>();
@@ -95,17 +80,18 @@ export default function Guest() {
         renderItem={({ item }) => <VideoItem item={item} />}
         pagingEnabled
         showsVerticalScrollIndicator={false}
-        initialNumToRender={3}
-        maxToRenderPerBatch={3}
-        windowSize={5}
-        getItemLayout={(data, index) => ({ length: height, offset: height * index, index })}
+        getItemLayout={(data, index) => ({
+          length: height,
+          offset: height * index,
+          index,
+        })}
       />
     );
   }
 
   return (
     <View style={styles.container}>
-      {/* Image Carousel with Animation */}
+      {/* Image Carousel */}
       <View style={styles.bannerContainer}>
         <AnimatedFlatList
           ref={flatListRef}
@@ -126,18 +112,38 @@ export default function Guest() {
         />
       </View>
 
-      {/* Sections Grid */}
+      {/* Animated Section Grid */}
+      <View style={styles.gridWrapper}>
       <FlatList
-        data={sections}
-        numColumns={2}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <TouchableOpacity style={styles.card} onPress={() => navigation.navigate(item.screen)}>
-            <Image source={item.image} style={styles.cardImage} />
-            <Text style={styles.cardTitle}>{item.title}</Text>
-          </TouchableOpacity>
-        )}
-      />
+  data={sections}
+  numColumns={2}
+  keyExtractor={(item) => item.id}
+  contentContainerStyle={styles.gridContainer}
+  columnWrapperStyle={{ justifyContent: "space-between" }}
+  renderItem={({ item, index }) => {
+    const animationType = index % 2 === 0 ? "fadeInRight" : "fadeInLeft";
+    const delay = 300 + index * 150;
+    return (
+      <Animatable.View
+        animation={animationType}
+        delay={delay}
+        duration={600}
+        useNativeDriver
+        style={{ flex: 1, margin: 5 }}
+      >
+        <TouchableOpacity
+          style={styles.card}
+          onPress={() => navigation.navigate(item.screen)}
+        >
+          <Image source={item.image} style={styles.cardImage} />
+          <Text style={styles.cardTitle}>{item.title}</Text>
+        </TouchableOpacity>
+      </Animatable.View>
+    );
+  }}
+/>
+
+      </View>
 
       {/* Bottom Navigation */}
       <View style={styles.bottomNav}>
@@ -147,7 +153,7 @@ export default function Guest() {
         <TouchableOpacity onPress={() => setShowWebView(true)}>
           <Ionicons name="flash" size={28} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => alert("No Announcement")}> 
+        <TouchableOpacity onPress={() => alert("No Announcement")}>
           <Ionicons name="megaphone" size={28} color="black" />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -159,15 +165,13 @@ export default function Guest() {
 }
 
 const styles = StyleSheet.create({
-  container: { 
-    flex: 1, 
-    backgroundColor: "#fff", 
-    // paddingVertical: 10 
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
   },
-  bannerContainer: { 
-    alignItems: "center", 
-    justifyContent: "center", 
-    marginVertical: 10 
+  bannerContainer: {
+    marginVertical: 10,
+    alignItems: "center",
   },
   imageWrapper: {
     shadowColor: "#000",
@@ -176,17 +180,24 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 5,
     borderRadius: 5,
-    overflow:"hidden",
+    overflow: "hidden",
   },
   banner: {
     width: width - 20,
     height: 170,
     resizeMode: "stretch",
     borderRadius: 5,
-    margin: 10,
+    marginHorizontal: 10,
+  },
+  gridWrapper: {
+    flex: 1,
+  },
+  gridContainer: {
+    paddingBottom: 20,
+    paddingHorizontal: 10,
   },
   card: {
-    flex: 4,
+    flex: 1,
     margin: 10,
     alignItems: "center",
     backgroundColor: "#f9f9f9",
@@ -194,16 +205,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 3,
   },
-  cardImage: { 
-    width: 50, 
-    height: 50, 
-    marginBottom: 5, 
-    borderRadius: 10 
+  cardImage: {
+    width: 50,
+    height: 50,
+    marginBottom: 5,
+    borderRadius: 10,
   },
-  cardTitle: { 
-    fontSize: 16, 
-    fontWeight: "bold", 
-    textAlign: "center" 
+  cardTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   bottomNav: {
     flexDirection: "row",

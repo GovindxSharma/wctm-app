@@ -7,7 +7,6 @@
     "icon": "./assets/images/Clogo.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": true
     },
@@ -15,27 +14,28 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/Clogo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.vishal0017.wctmapp"
     },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      // "favicon": "./assets/images/favicon.png"
+    "splash": {
+      "image": "./assets/images/Clogo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
     "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff"
-        }
-      ]
+      "expo-router"
     ],
     "experiments": {
-      "typedRoutes": true
+      "typedRoutes": true,
+      "newArchEnabled": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "106f5071-2cae-49f9-b12a-555140ba1c25"
+      }
     }
   }
 }

@@ -19,7 +19,7 @@ const FacultyLogin: React.FC = () => {
     }
   };
   
-
+ 
   return (
     <View style={styles.container}>
       {/* College Logo */}

@@ -1,123 +1,144 @@
+# WCTM College Management Application
 
-# 🎓 WCTM College App
-
-A **cross-platform college management mobile application** built with **React Native, Expo Router, and TypeScript**, designed to streamline student, faculty, and admin interactions for **WCTM (World College of Technology and Management)**.
-
-The app supports login and registration for students and faculty, profile dashboards, and navigation between multiple user-specific pages — all optimized for performance and responsive design.
+A cross-platform mobile solution built with React Native, Expo Router, and TypeScript designed to streamline interactions between students, faculty, and administrative staff at World College of Technology and Management (WCTM).
 
 ---
 
-## ✨ Features
+## Architecture & Overview
 
-✅ **Multi-Role System**
-
-* Student, Faculty, and Admin login/register workflows
-* Role-based page rendering
-
-✅ **Profile Screens**
-
-* Student and Faculty profile pages
-* Admin dashboard with basic faculty management structure
-
-✅ **Modern Navigation**
-
-* Built using `expo-router` and `@react-navigation/native`
-* Stack + Tab navigation for fluid screen switching
-
-✅ **Responsive UI/UX**
-
-* Styled with animations (`moti`, `react-native-animatable`)
-* Font integration, splash screen, and icons for a clean native feel
-* Optimized for Android, iOS, and Web
-
-✅ **Mobile-Ready**
-
-* Can run directly on device/emulator via Expo Go
-* Designed with performance and clarity in mind
+WCTM College App provides a centralized portal for campus operations. It uses a file-based routing architecture powered by `expo-router`, ensuring performant, type-safe navigation across Android, iOS, and Web platforms. The modular project structure allows seamless scaling for future backend integrations such as automated attendance, notifications, and analytics.
 
 ---
 
-## 🗂️ Folder Structure
+## Key Features
 
-```
+### Role-Based Access Control (RBAC)
+
+* Dedicated authentication and registration flows for Students, Faculty, and Administrators.
+* Contextual route protection and dynamic dashboard rendering based on active role.
+
+### Dashboard & Profile Management
+
+* **Student Portal:** Profile overview, academic records, and personalized schedules.
+* **Faculty Portal:** Instructor profile management, course overview, and student directory access.
+* **Admin Console:** High-level administrative controls and faculty onboarding workflows.
+
+### Performance & UI Architecture
+
+* **File-Based Routing:** Deep linking and unified routing logic using `expo-router`.
+* **Fluid Micro-interactions:** Smooth screen transitions and UI feedback powered by `moti` and `react-native-animatable`.
+* **Cross-Platform Consistency:** Unified layout system optimized for Android, iOS, and mobile web browsers.
+
+---
+
+## Tech Stack
+
+| Category | Technologies |
+| --- | --- |
+| **Core Framework** | React Native, React 18 |
+| **Ecosystem & Build** | Expo (SDK 52), EAS (Expo Application Services) |
+| **Language** | TypeScript |
+| **Routing & Navigation** | Expo Router, React Navigation |
+| **UI & Animations** | Moti, React Native Reanimated, React Native Animatable |
+| **Styling & Assets** | Expo Font, Expo Splash Screen, Vector Icons |
+
+---
+
+## Project Structure
+
+```text
 .
-├── app/                         # All screen and route files (via expo-router)
-│   ├── index.tsx                # Main route
-│   ├── home.tsx                 # Common home page
-│   ├── login.tsx                # Student/faculty login screen
-│   ├── register.tsx             # Registration screen
-│   ├── studentProfile.tsx       # Student dashboard
-│   ├── facultyRegister.tsx      # Faculty-specific registration
-│   ├── adminProfile.tsx         # Admin profile and control panel
-│   └── pages/                   # (Optional) additional UI pages
-├── assets/                      # Fonts and images
-│   ├── fonts/
-│   └── images/
-├── app.json                     # Expo app configuration
-├── eas.json                     # Expo Application Services (build profiles)
-├── tsconfig.json                # TypeScript config
-├── package.json                 # Dependencies and scripts
-└── README.md
+├── app/                        # File-based routes and screen layouts
+│   ├── index.tsx               # Entry point and initial route handler
+│   ├── home.tsx                # Universal landing dashboard
+│   ├── login.tsx               # Unified authentication screen
+│   ├── register.tsx            # Student onboarding screen
+│   ├── studentProfile.tsx      # Student management dashboard
+│   ├── facultyRegister.tsx     # Faculty onboarding screen
+│   ├── adminProfile.tsx        # Administrative management console
+│   └── pages/                  # Nested operational and content views
+├── assets/                     # Static resources (images, branding, custom fonts)
+├── app.json                    # Expo application manifest
+├── eas.json                    # Expo Application Services build configurations
+├── tsconfig.json               # TypeScript compiler configuration
+└── package.json                # Project dependencies and operational scripts
+
 ```
 
 ---
 
-## ⚙️ Setup Instructions
+## Getting Started
 
-### 1. Clone the repo
+### Prerequisites
 
+Ensure the following tools are installed on your machine:
+
+* [Node.js](https://nodejs.org/) (version 18.x or higher recommended)
+* [Git](https://git-scm.com/)
+* [Expo Go](https://expo.dev/go) application on your mobile device (for physical testing)
+
+### Installation
+
+1. **Clone the repository:**
 ```bash
 git clone https://github.com/GovindxSharma/wctm-app.git
 cd wctm-app
+
 ```
 
-### 2. Install dependencies
 
+2. **Install dependencies:**
 ```bash
 npm install
+
 ```
 
-### 3. Run the project
 
-Choose your platform:
+
+### Development Server
+
+Start the Expo development server:
 
 ```bash
-npm run android     # For Android
-npm run ios         # For iOS
-npm run web         # To preview in browser
+npm start
+
 ```
 
-Or use:
+Run target-specific platforms directly:
 
 ```bash
-npm start           # Launches Expo Dev Tools
-```
+# Android emulator or connected device
+npm run android
 
-Make sure to have Expo CLI installed globally:
+# iOS simulator (macOS required)
+npm run ios
 
-```bash
-npm install -g expo-cli
+# Web browser preview
+npm run web
+
 ```
 
 ---
 
-## 📦 Tech Stack
+## Roadmap
 
-| Tech                  | Usage                                   |
-| --------------------- | --------------------------------------- |
-| **React Native**      | Core app framework                      |
-| **Expo SDK 52**       | React Native bundling & dev environment |
-| **expo-router**       | Navigation & routing                    |
-| **TypeScript**        | Type-safe development                   |
-| **Moti & Animatable** | Animations and transitions              |
-| **React Navigation**  | Stack/tab navigators                    |
-| **Expo Assets**       | Fonts, splash screen, status bar, etc.  |
+* [ ] REST API / Firebase backend integration
+* [ ] Push notification services for campus-wide alerts
+* [ ] Real-time attendance logging and reporting module
+* [ ] Fee breakdown and online payment gateway integration
 
 ---
 
-## 📃 Description
+## Contributing
 
-**WCTM App** is a role-based mobile application designed to simplify campus operations digitally. Whether you're a student checking your profile, a faculty managing attendance, or an admin monitoring activity, this app offers a smooth, visually appealing interface powered by the latest React Native and Expo tools. It's structured to scale with additional features like notifications, chat, and database integration in the future.
+1. Fork the project repository.
+2. Create your feature branch (`git checkout -b feature/new-capability`).
+3. Commit your changes (`git commit -m "feat: add campus notification system"`).
+4. Push to the branch (`git push origin feature/new-capability`).
+5. Open a Pull Request.
 
 ---
 
+## License
+
+This project is licensed under the terms of the MIT License.
